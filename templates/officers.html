@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}Officers - Athens Skating Club{% endblock %}
+
+{% block content %}
+    <h2>Club Officers</h2>
+    <div class="officer-cards">
+	{% for officer in officers %}
+	<div class="officer-card">
+	    <img src="{{ officer.photo_url or url_for('static', filename="placeholder.png") }}" alt="Test">
+	    <h3>{{ officer.name }}</h3>
+	    <p>{{ officer.role }}</p>
+	    <p>{{ officer.major }}</p>
+	</div>
+	{% endfor %}	
+    </div>
+{% endblock %}

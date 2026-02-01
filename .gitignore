@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+
+# Database
+instance/skating.db
+
+# VSCode
+.vscode/
+
+# MacOS
+.DS_Store

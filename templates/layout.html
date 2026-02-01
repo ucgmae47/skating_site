@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Athens Skating Club{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/logo.jpg" type="image/jpeg">
+</head>
+<body>
+    <header>
+        <nav>
+	    <div class="left-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('schedule') }}">Schedule</a>
+    	        <a href="{{ url_for('officers') }}">Officers</a>
+	    </div>
+	    <div class="right-links">
+	        <a href="#">Sign Up</a>
+	        <a href="#">Login</a>
+	    </div>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
+
