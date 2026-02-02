@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Sign Up - Athens Skating Club{% endblock %}
+
+{% block content %}
+<h2>Sign Up</h2>
+
+<!-- Flashed messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}" style="color: {% if category == 'error' %}red{% else %}green{% endif %};">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST" action="{{ url_for('signup') }}">
+    <label for="first-name">First Name:</label><br>
+    <input type="text" name="first-name" required><br><br>
+
+    <label for="last-name">Last Name:</label><br>
+    <input type="text" name="last-name" required><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label for="phone">Phone Number:</label><br>
+    <input type="text" name="phone"><br><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <label for="confirm_password">Confirm Password:</label><br>
+    <input type="password" name="confirm_password" required><br><br>
+
+    <input type="submit" value="Sign Up">
+</form>
+<p>Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
+{% endblock %}

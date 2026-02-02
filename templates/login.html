@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h2>Login</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}" style="color: {% if category == 'error' %}red{% else %}green{% endif %};">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST" action="{{ url_for('login') }}">
+    <label for="email">Email:</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <input type="submit" value="Login">
+</form>
+<p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a>.</p>
+{% endblock %}
