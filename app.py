@@ -101,9 +101,17 @@ def login():
             flash("Incorrect password.", "error")
         else:
             session['user_id'] = user.id
+            session['first_name'] = user.first_name
+            session['last_name'] = user.last_name
             return redirect(url_for("home"))
 
     return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
+

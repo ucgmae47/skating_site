@@ -15,8 +15,13 @@
     	        <a href="{{ url_for('officers') }}">Officers</a>
 	    </div>
 	    <div class="right-links">
-	        <a href="{{ url_for('signup') }}">Sign Up</a>
-	        <a href="{{ url_for('login') }}">Login</a>
+	        {% if session.get('user_id') %}
+	            <span>Welcome, {{ session.get('first_name') }}!</span>
+	            <a href="{{ url_for('logout') }}">Logout</a>
+	        {% else %}
+	            <a href="{{ url_for('signup') }}">Sign Up</a>
+	            <a href="{{ url_for('login') }}">Login</a>
+	        {% endif %}
 	    </div>
         </nav>
     </header>

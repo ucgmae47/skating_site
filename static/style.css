@@ -6,7 +6,8 @@ nav {
     align-items: center;
 }
 
-nav a {
+nav a,
+nav span {
     color: white;
     text-decoration: none;
     font-weight: bold;
