@@ -28,6 +28,19 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+    <footer>
+    	<div class="contact-container">
+            <h2>Contact Us</h2>
+            <p>Email: <a href="mailto:athensgafigureskating@gmail.com">athensgafigureskating@gmail.com</a></p>
+            <p>Address: 300 N Thomas St, Athens, GA 30601</p>
+            <p>Location: Akins Ford Arena @ Classic Center</p>
+            <p>Primary Access: North Thomas Street</p>
+            <p>Follow us on social media: 
+                <a href="https://www.instagram.com/athens_ga_figure_skating/" target="_blank">Instagram</a>
+            </p>
+        </div>
+    </footer>
+    <script src={{ url_for('static', filename='calendar.js') }}></script>
 </body>
 </html>
 

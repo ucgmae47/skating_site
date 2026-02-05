@@ -4,6 +4,11 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 
 nav a,
@@ -88,3 +93,133 @@ tbody > tr:hover {
     border-radius: 8px 8px 0 0;
     margin-bottom: 10px;
 }
+
+footer {
+    background-color: #f2f2f2;
+    padding: 30px 20px;
+    text-align: center;
+    margin-top: 50px;
+    border-top: 1px solid #ccc;
+}
+
+footer h2 {
+    margin-bottom: 15px;
+}
+
+footer a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    color: #fa84d9;
+}
+
+.contact-container p {
+    margin: 5px 0;
+}
+
+.carousel {
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    width: max-content;
+    animation: scroll 60s linear infinite;
+}
+
+.carousel-slide {
+    flex: 0 0 auto;
+    height: 100px;
+}
+
+.carousel-slide img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.calendar {
+    width: 320px;
+    margin: 40px auto;
+    font-family: sans-serif;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.calendar-day {
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+}
+
+.calendar-day.selected {
+    background-color: #fa84d9;
+}
+
+.calendar-day:not(.selected):hover {
+    background-color: #3bc1e3;
+}
+
+.calendar-day:hover {
+    cursor: pointer;
+}
+
+#nextMonth:hover {
+    cursor: pointer;
+}
+
+#prevMonth {
+    cursor: pointer;
+}
+
+.club-container {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    margin-top: 50px;
+}
+
+.video-wrapper {
+    width: 50%;
+    aspect-ratio: 16 / 9;
+}
+
+.video-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.club-description {
+    width: 50%;
+    display: grid;
+    place-items: center;
+}
+

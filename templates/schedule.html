@@ -20,7 +20,16 @@
 		<td>{{ event.time }}</td>
 	    </tr>
 	    {% endfor %}
-	</tbody>
+        </tbody>
     </table>
+
+    <div class="calendar">
+        <div class="calendar-header">
+            <button id="prevMonth">←</button>
+            <h2 id="monthLabel"></h2>
+            <button id="nextMonth">→</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
 {% endblock %}
 

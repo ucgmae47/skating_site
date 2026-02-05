@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import request, redirect, url_for, flash, session
+from flask import request, redirect, url_for, flash, session, jsonify
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///skating.db"
@@ -46,15 +46,31 @@ class Officer(db.Model):
     def __repr__(self):
         return f'id: {self.id}, name: {self.name}, role: {self.role}, major: {self.major}'
 
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    file_name = db.Column(db.String(100), nullable=False)
+    
+    def __repr__(self):
+        return f'id: {self.id}, file_name: {self.file_name}'
+
+class Date(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    day = db.Column(db.Integer, nullable=False)
+    month = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+
 def load_events():
     return Event.query.all()
     	
 def load_officers():
     return Officer.query.all()
 
+def load_images():
+    return Image.query.all()
+
 @app.route("/home")
 def home():
-    return render_template("home.html", events=load_events())
+    return render_template("home.html", images=load_images())
 
 @app.route("/schedule")
 def schedule():
@@ -112,6 +128,37 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
+@app.route("/update_calendar", methods=["POST"])
+def update_calendar():
+    data = request.get_json()
+    day = data['day']
+    month = data['month']
+    year = data['year']
+
+    if data['add'] == True:
+        db.session.add(Date(day=day, month=month, year=year))
+        db.session.commit()
+    else:
+        date = Date.query.filter_by(day=day, month=month, year=year).first()
+        db.session.delete(date)
+        db.session.commit()
+
+    return {"status": "success"}, 200
+
+@app.route("/update_month", methods=["POST"])
+def update_month():
+    data = request.get_json()
+    month = data['month']
+    year = data['year']
+
+    dates = Date.query.filter_by(month=month, year=year)
+    
+    days = [d.day for d in dates]
+
+    return jsonify({
+        "days": days
+    })
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000, debug=True)
 

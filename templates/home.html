@@ -6,6 +6,27 @@
 <section class="hero">
     <h1>Athens Figure Skating Club</h1>
     <p>Slogan/Mission Statement</p>
+    <div class="carousel">
+        <div class="carousel-track">
+            {% for image in images %}
+            <div class="carousel-slide">
+                <img src="{{ url_for('static', filename=image.file_name) }}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="club-container">
+        <div class="video-wrapper">
+            <iframe
+                src="https://www.youtube.com/embed/STqJ_Up4iFg"
+                allowfullscreen>
+            </iframe>
+        </div>
+    
+        <div class="club-description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </div>
+    </div>
 </section>
 {% endblock %}
 
