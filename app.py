@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request, redirect, url_for, flash, session, jsonify
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///skating.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root@localhost/skating"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = "ucgmae47"
 
@@ -16,7 +16,8 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(20), nullable=True)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.Text, nullable=False)
+    admin = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -53,7 +54,8 @@ class Image(db.Model):
     def __repr__(self):
         return f'id: {self.id}, file_name: {self.file_name}'
 
-class Date(db.Model):
+class DateException(db.Model):
+    __tablename__ = 'date_exception'
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.Integer, nullable=False)
     month = db.Column(db.Integer, nullable=False)
@@ -74,7 +76,8 @@ def home():
 
 @app.route("/schedule")
 def schedule():
-    return render_template("schedule.html", events=load_events())
+    days = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+    return render_template("schedule.html", events=load_events(), days=days)
 
 @app.route("/officers")
 def officers():
@@ -119,6 +122,7 @@ def login():
             session['user_id'] = user.id
             session['first_name'] = user.first_name
             session['last_name'] = user.last_name
+            session['admin'] = user.admin
             return redirect(url_for("home"))
 
     return render_template("login.html")
@@ -136,10 +140,10 @@ def update_calendar():
     year = data['year']
 
     if data['add'] == True:
-        db.session.add(Date(day=day, month=month, year=year))
+        db.session.add(DateException(day=day, month=month, year=year))
         db.session.commit()
     else:
-        date = Date.query.filter_by(day=day, month=month, year=year).first()
+        date = DateException.query.filter_by(day=day, month=month, year=year).first()
         db.session.delete(date)
         db.session.commit()
 
@@ -151,13 +155,18 @@ def update_month():
     month = data['month']
     year = data['year']
 
-    dates = Date.query.filter_by(month=month, year=year)
+    dates = DateException.query.filter_by(month=month, year=year)
     
     days = [d.day for d in dates]
 
     return jsonify({
         "days": days
     })
+
+@app.route("/is_admin")
+def is_admin():
+    admin = session.get("admin", False)
+    return jsonify({"admin": admin})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

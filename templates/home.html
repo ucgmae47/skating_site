@@ -13,6 +13,11 @@
                 <img src="{{ url_for('static', filename=image.file_name) }}">
             </div>
             {% endfor %}
+            {% for image in images %}
+            <div class="carousel-slide">
+                <img src="{{ url_for('static', filename=image.file_name) }}">
+            </div>
+            {% endfor %}
         </div>
     </div>
     <div class="club-container">
@@ -21,8 +26,7 @@
                 src="https://www.youtube.com/embed/STqJ_Up4iFg"
                 allowfullscreen>
             </iframe>
-        </div>
-    
+        </div>   
         <div class="club-description">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>

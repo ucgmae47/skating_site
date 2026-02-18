@@ -1,3 +1,12 @@
+let isAdmin = false;
+
+fetch('/is_admin')
+    .then(response => response.json())
+    .then(data => {
+        isAdmin = data.admin;
+        renderCalendar();
+        updateMonth(currentDate.getMonth(), currentDate.getFullYear());
+    });
 
 const monthLabel = document.getElementById("monthLabel");
 const calendarGrid = document.getElementById("calendarGrid");
@@ -27,16 +36,25 @@ function renderCalendar() {
         cell.classList.add("calendar-day");
         cell.textContent = day;
 
-	cell.onclick = () => {
-	    cell.classList.toggle("selected")
+        const d = (firstDay + day - 1) % 7;
+        const isWeekday = isNormalPractice(d);
 
-	    if (cell.classList.contains("selected")) {
-		sendData(day, month, year, true);
-	    } else {
-		sendData(day, month, year, false);
-	    }
-	};
+        if (isWeekday) {
+            cell.classList.add("selected");
+        }
 
+        if (isAdmin) {
+            cell.onclick = () => {
+                if (isWeekday && cell.classList.contains("selected")) {
+                    sendData(day, month, year, true);
+                } else if (!isWeekday && !cell.classList.contains("selected")) {
+                    sendData(day, month, year, true);
+                } else {
+                    sendData(day, month, year, false);
+                }
+                cell.classList.toggle("selected")
+            };
+        }
         calendarGrid.appendChild(cell);
     }
 }
@@ -53,11 +71,8 @@ document.getElementById("nextMonth").onclick = () => {
     updateMonth(currentDate.getMonth(), currentDate.getFullYear());
 };
 
-renderCalendar();
-updateMonth(currentDate.getMonth(), currentDate.getFullYear());
-
 function sendData(day, month, year, add) {
-    fetch('http://127.0.0.1:8000/update_calendar', {
+    fetch('/update_calendar', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -72,7 +87,7 @@ function sendData(day, month, year, add) {
 }
 
 function updateMonth(month, year) {
-    fetch('http://127.0.0.1:8000/update_month', {
+    fetch('/update_month', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -93,11 +108,15 @@ function highlightDates(days) {
 
     dayDivs.forEach(div => {
         const dayNumber = parseInt(div.textContent, 10);
-
-        if (daySet.has(dayNumber)) {
-            div.classList.add("selected");
-        } else {
+        const day = (new Date(currentDate.getFullYear(), currentDate.getMonth(), dayNumber)).getDay();
+        if (daySet.has(dayNumber) && isNormalPractice(day)) {
             div.classList.remove("selected");
+        } else if (daySet.has(dayNumber) && !isNormalPractice(day)) {
+            div.classList.add("selected");
         }
     });
+}
+
+function isNormalPractice(d) {
+    return d >= 1 && d <= 4;
 }

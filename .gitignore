@@ -10,3 +10,6 @@ instance/skating.db
 
 # MacOS
 .DS_Store
+
+# Migration Tool
+migrate.py
