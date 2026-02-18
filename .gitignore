@@ -13,3 +13,9 @@ instance/skating.db
 
 # Migration Tool
 migrate.py
+
+# Environment Variables
+.env
+
+# Private Assets
+/private_assets/

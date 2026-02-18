@@ -1,12 +1,16 @@
+import os
+from dotenv import load_dotenv
+from flask import send_from_directory
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request, redirect, url_for, flash, session, jsonify
 
+load_dotenv()
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root@localhost/skating"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.secret_key = "ucgmae47"
+app.secret_key = os.environ["FLASK_SECRET_KEY"]
 
 db = SQLAlchemy(app)
 
@@ -167,6 +171,11 @@ def update_month():
 def is_admin():
     admin = session.get("admin", False)
     return jsonify({"admin": admin})
+
+@app.route('/private_assets/<path:filename>')
+def private_assets(filename):
+    folder_path = os.path.join(app.root_path, 'private_assets')
+    return send_from_directory(folder_path, filename)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)

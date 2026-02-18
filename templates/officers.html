@@ -7,7 +7,7 @@
     <div class="officer-cards">
 	{% for officer in officers %}
 	<div class="officer-card">
-	    <img src="{{ officer.photo_url or url_for('static', filename="placeholder.png") }}" alt="Test">
+		<img src="{{ ('/private_assets/' + officer.photo_url) if officer.photo_url else url_for('static', filename='placeholder.png') }}" alt="Test">
 	    <h3>{{ officer.name }}</h3>
 	    <p>{{ officer.role }}</p>
 	    <p>{{ officer.major }}</p>
