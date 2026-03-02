@@ -74,7 +74,7 @@ def load_officers():
 def load_images():
     return Image.query.all()
 
-@app.route("/home")
+@app.route("/")
 def home():
     return render_template("home.html", images=load_images())
 

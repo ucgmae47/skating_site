@@ -17,5 +17,8 @@ migrate.py
 # Environment Variables
 .env
 
+# Virtual Environments
+.venv/
+
 # Private Assets
 /private_assets/
