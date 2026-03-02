@@ -177,6 +177,12 @@ def private_assets(filename):
     folder_path = os.path.join(app.root_path, 'private_assets')
     return send_from_directory(folder_path, filename)
 
+"""
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
+"""
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # default to 5000 locally
+    app.run(host="0.0.0.0", port=port)
 
