@@ -8,7 +8,7 @@ from flask import request, redirect, url_for, flash, session, jsonify
 
 load_dotenv()
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root@localhost/skating"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["MYSQL_URI"]
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
 
