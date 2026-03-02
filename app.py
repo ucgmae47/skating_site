@@ -5,6 +5,7 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request, redirect, url_for, flash, session, jsonify
+from b2sdk.v2 import InMemoryAccountInfo, B2Api
 
 load_dotenv()
 app = Flask(__name__)
@@ -13,6 +14,22 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
 
 db = SQLAlchemy(app)
+
+# For safely storing private assets
+
+# Initialize B2 API
+info = InMemoryAccountInfo()
+b2_api = B2Api(info)
+
+# Authorize with keys from environment variables
+b2_api.authorize_account(
+    "production",
+    os.environ["B2_KEY_ID"],
+    os.environ["B2_APP_KEY"]
+)
+
+# Connect to your bucket
+bucket = b2_api.get_bucket_by_name("skating-assets")
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -85,7 +102,14 @@ def schedule():
 
 @app.route("/officers")
 def officers():
-    return render_template("officers.html", officers=load_officers())
+    officers = Officer.query.all()
+
+    # Generate signed URLs for display only
+    for officer in officers:
+        if officer.photo_url:  # this should be the file name, e.g., 'caleb_elder.jpg'
+            officer.photo_url = bucket.get_download_url(officer.photo_url)
+
+    return render_template("officers.html", officers=officers)
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
