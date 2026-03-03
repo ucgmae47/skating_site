@@ -102,6 +102,7 @@ def schedule():
 
 @app.route("/officers")
 def officers():
+    """
     officers = Officer.query.all()
 
     # Generate signed URLs for display only
@@ -109,6 +110,19 @@ def officers():
         if officer.photo_url:  # this should be the file name, e.g., 'caleb_elder.jpg'
             officer.photo_url = bucket.get_download_url(officer.photo_url)
 
+    return render_template("officers.html", officers=officers)
+    """
+    officers = Officer.query.all()
+
+    for officer in officers:
+        if officer.photo_url:
+            token = bucket.get_download_authorization(
+                file_name_prefix=officer.photo_url,
+                valid_duration_in_seconds=3600
+            )
+            base_url = bucket.get_download_url(officer.photo_url)
+            officer.photo_url = f"{base_url}?Authorization={token}"
+            
     return render_template("officers.html", officers=officers)
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -200,11 +214,6 @@ def is_admin():
 def private_assets(filename):
     folder_path = os.path.join(app.root_path, 'private_assets')
     return send_from_directory(folder_path, filename)
-
-"""
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
-"""
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # default to 5000 locally
