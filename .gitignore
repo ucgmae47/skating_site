@@ -14,9 +14,6 @@ instance/skating.db
 # Migration Tool
 migrate.py
 
-# Runtime
-runtime.txt
-
 # Environment Variables
 .env
 
